@@ -1,0 +1,33 @@
+nsd:
+  nsd:
+  - id: privacy_logger_collector_ns
+    name: privacy_logger_collector_ns
+    designer: OSM
+    description: NS of log collector using Elasticsearch and Kibana
+    version: '1.0'
+    vnfd-id:
+    - privacy_logger_collector_vnf
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: "1"
+        vnfd-id: privacy_logger_collector_vnf
+        virtual-link-connectivity:
+        - virtual-link-profile-id: slice_vld_mgmt
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: vnf-cp-mgmt
+        - virtual-link-profile-id: slice_vld_data3
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: vnf-cp-data
+            ip-address: "192.168.3.2"
+    virtual-link-desc:
+    - id: slice_vld_mgmt
+      mgmt-network: true
+    - id: slice_vld_data3
+    sapd:
+    - id: nsd_cp_mgmt
+      virtual-link-desc: slice_vld_mgmt
+    - id: nsd_cp_data
+      virtual-link-desc: slice_vld_data3

@@ -1,0 +1,133 @@
+#cloud-config
+hostname: classifier
+password: classifier
+chpasswd:
+  expire: False
+package_update: true
+write_files:
+  - path: /etc/netplan/99-config.yaml
+    content: |
+      network:
+        version: 2
+        ethernets:
+          ens3:
+            dhcp4: true
+          ens4:
+            addresses:
+            - 192.168.1.2/24
+          ens5:
+            addresses:
+            - 192.168.2.1/24
+    owner: root:root
+    permissions: '0644'
+
+  - path: /etc/rsyslog.d/80-nginx.conf
+    content: |
+      module(load="imudp")
+      input(type="imudp" port="514")
+      if $syslogfacility-text == 'local7' and $programname == 'nginx' 
+      then /var/log/nginx.log
+
+  - path: /etc/rsyslog.d/90-redactor.conf
+    content: |
+      module(load="imfile")
+      input(type="imfile"
+            File="/src/classifier.log"
+            Tag="classifier"
+            Facility="local7")
+      if $syslogfacility-text == 'local7' and $programname == 'classifier' 
+      then action(type="omfwd" target="192.168.2.2" port="10514" protocol="tcp"
+                  action.resumeRetryCount="100"
+                  queue.type="linkedList" queue.size="10000")
+
+  - path: /src/classifier_mock.py
+    content: |
+      import os
+      import sys
+      import logging
+      from time import sleep
+      from random import randrange
+
+      class FileWatcher:
+          def __init__(self, file_path: str):
+              self.path = file_path
+              self.last_modified = os.stat(self.path).st_mtime
+              self.line_index = self._get_number_of_lines_from_file()
+
+          def _get_number_of_lines_from_file(self) -> int:
+              number_of_lines = 0
+              with open(self.path, "rb") as f:
+                  number_of_lines = sum(1 for _ in f)
+              return number_of_lines
+
+          def watch(self, func):
+              while True:
+                  try:
+                      last_modified = os.stat(self.path).st_mtime
+                      file_changed = last_modified > self.last_modified
+                      if file_changed:
+                          self.last_modified = last_modified
+                          last_lines = self._read_new_lines()
+                          self.line_index += len(last_lines)
+                          func(last_lines)
+                      sleep(1)
+                  except KeyboardInterrupt:
+                      print("\nExiting")
+                      break
+
+          def _read_new_lines(self) -> list:
+              lines = []
+              with open(self.path) as file:
+                  for i, line in enumerate(file):
+                      if i >= self.line_index:
+                          lines.append(line)
+              return lines
+
+      def get_privacy_level() -> str:
+          PRIVACY_LEVELS = ['LOW', 'MEDIUM', 'HIGH']
+          privacy_level = randrange(0, 3)
+          return PRIVACY_LEVELS[privacy_level]
+
+      def transform_lines(lines: list):
+          for i in range(len(lines)):
+              line_without_new_line = lines[i][:-1]
+              privacy_level = get_privacy_level()
+              lines[i] = f"{line_without_new_line} [{privacy_level}]\n"
+
+      def write_lines_to_file(path: str, lines: list):
+          with open(path, "a") as output_file:
+              output_file.writelines(lines)
+
+      def remove_nginx_tag_from_lines(lines: list):
+          NGINX_TAG = "nginx"
+          NGINX_TAG_SUFFIX = ": "
+          for i in range(len(lines)):
+              index_of_tag = lines[i].find(f"{NGINX_TAG}:")
+              tag_found = index_of_tag != -1
+              if tag_found:
+                  final_index_of_tag = index_of_tag + len(NGINX_TAG) + len(NGINX_TAG_SUFFIX)
+                  lines[i] = lines[i][final_index_of_tag:]
+
+      def transform_lines_and_write_to_file(new_lines: list):
+          transform_lines(new_lines)
+          remove_nginx_tag_from_lines(new_lines)
+          global output_file
+          write_lines_to_file(output_file, new_lines)
+
+      def main(input_file: str):
+          file_watcher = FileWatcher(input_file)
+          file_watcher.watch(transform_lines_and_write_to_file)
+
+      if __name__ == "__main__":
+          print("Starting")
+          input_file = "/var/log/nginx.log"
+          output_file = "/src/classifier.log"
+          main(input_file)
+    permissions: '0755'
+runcmd:
+  - mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+  - netplan apply
+  - touch /var/log/nginx.log
+  - chown syslog:adm /var/log/nginx.log
+  - chown ubuntu:ubuntu /src/
+  - python3 /src/classifier_mock.py > /src/output.log

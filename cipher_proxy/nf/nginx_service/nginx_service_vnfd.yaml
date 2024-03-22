@@ -1,0 +1,54 @@
+vnfd:
+  id: nginx_service_vnf
+  product-name: nginx_service_vnf
+  description: A NGINX service which can receive configurations to change its ciphering suite
+  provider: OSM
+  version: '1.0'
+  mgmt-cp: vnf-mgmt-cp
+  virtual-storage-desc:
+  - id: nginx_service_vnfd-VM-storage
+    size-of-storage: 20
+  virtual-compute-desc:
+  - id: nginx_service_vnfd-VM-compute
+    virtual-cpu:
+      num-virtual-cpu: 1
+    virtual-memory:
+      size: 2
+  sw-image-desc:
+  - id: "rigourous-ubuntu"
+    name: "rigourous-ubuntu"
+    image: "rigourous-ubuntu"
+  df:
+  - id: default-df
+    instantiation-level:
+    - id: default-instantiation-level
+      vdu-level:
+      - vdu-id: nginx_service_vnfd-VM
+        number-of-instances: 1
+    vdu-profile:
+    - id: nginx_service_vnfd-VM
+      min-number-of-instances: 1
+      max-number-of-instances: 1
+    # At least one VDU need to be specified
+    # Additional VDUs can be created by copying the
+    # VDU descriptor below
+  vdu:
+  - id: nginx_service_vnfd-VM
+    cloud-init-file: cloud-config.txt
+    name: nginx_service_vnfd-VM
+    description: nginx_service_vnfd-VM
+    sw-image-desc: "rigourous-ubuntu"
+    virtual-storage-desc:
+    - nginx_service_vnfd-VM-storage
+    virtual-compute-desc: nginx_service_vnfd-VM-compute
+    int-cpd:
+    - id: eth0-int
+      virtual-network-interface-requirement:
+      - name: eth0
+        virtual-interface:
+          type: PARAVIRT
+  ext-cpd:
+  - id: vnf-mgmt-cp
+    int-cpd:
+      vdu-id: nginx_service_vnfd-VM
+      cpd: eth0-int

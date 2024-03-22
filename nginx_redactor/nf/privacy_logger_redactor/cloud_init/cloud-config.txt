@@ -1,0 +1,90 @@
+#cloud-config
+hostname: redactor
+password: redactor
+chpasswd:
+  expire: False
+package_update: true
+packages:
+  - apt-transport-https
+  - logstash
+write_files:
+  - path: /etc/netplan/99-config.yaml
+    content: |
+      network:
+        version: 2
+        ethernets:
+          ens3:
+            dhcp4: true
+          ens4:
+            addresses:
+            - 192.168.2.2/24
+          ens5:
+            addresses:
+            - 192.168.3.1/24
+    owner: root:root
+    permissions: '0644'
+
+  - path: /etc/rsyslog.d/80-classifier.conf
+    content: |
+      module(load="imtcp")
+      input(type="imtcp" port="10514")
+      if $syslogfacility-text == 'local7' and $programname == 'classifier' 
+      then /var/log/classifier.log
+    
+  - path: /etc/logstash/conf.d/pipeline.conf
+    content: |
+        input {
+            file {
+                path => "/var/log/classifier.log"
+            }
+        }
+
+        filter {
+            grok {
+                match => { "message" => '%{SYSLOGTIMESTAMP:syslog_timestamp} %{DATA} %{DATA} %{IP:clientip} %{DATA} %{DATA} \[%{HTTPDATE:timestamp}\] "%{WORD:method} %{URIPATHPARAM:request} HTTP/%{NUMBER:httpversion}" %{NUMBER:response} %{NUMBER:bytes} "%{DATA:referrer}" "%{DATA:useragent}" \[%{WORD:severity}\]' }
+            }
+
+            if [severity] != "LOW" {
+                mutate {
+                    replace => { "clientip" => "[REDACTED]" }
+                }
+            }
+            if [event] {
+                mutate {
+                    remove_field => ["event"]
+                }
+            }
+            if [message] {
+                mutate {
+                    remove_field => ["message"]
+                }
+            }
+        }
+
+        output {
+            elasticsearch {
+                hosts => [ "https://192.168.3.2:9200" ]
+                index => "logs"
+                ssl_enabled => false
+                ssl_verification_mode => "none"
+                user => "privacy_logger"
+                password => "privacy_logger"
+            }
+            stdout { codec => rubydebug }
+        }
+
+  - path: /home/ubuntu/logstash.sh
+    content: |
+      #!/bin/bash
+      touch /var/log/classifier.log
+      chmod 666 /var/log/classifier.log
+      /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/pipeline.conf --config.reload.automatic
+    permissions: '0555'
+
+bootcmd:
+  - wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elastic-keyring.gpg
+  - echo "deb [signed-by=/usr/share/keyrings/elastic-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-8.x.list
+runcmd:
+  - mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+  - netplan apply
+  - ./home/ubuntu/logstash.sh

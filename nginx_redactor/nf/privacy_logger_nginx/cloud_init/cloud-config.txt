@@ -1,0 +1,28 @@
+#cloud-config
+hostname: nginx
+password: nginx
+chpasswd:
+  expire: False
+package_update: true
+packages:
+  - nginx
+write_files:
+  - path: /etc/netplan/99-config.yaml
+    content: |
+      network:
+        version: 2
+        ethernets:
+          ens3:
+            dhcp4: true
+          ens4:
+            addresses:
+            - 192.168.1.1/24
+    owner: root:root
+    permissions: '0644'
+  - path: /etc/nginx/conf.d/syslog.conf
+    content: |
+      access_log syslog:server=192.168.1.2:514,facility=local7;
+      error_log syslog:server=192.168.1.2:514,facility=local7;
+runcmd:
+  - mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+  - netplan apply

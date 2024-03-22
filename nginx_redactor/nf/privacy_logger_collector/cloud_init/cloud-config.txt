@@ -1,0 +1,50 @@
+#cloud-config
+hostname: collector
+password: collector
+chpasswd:
+  expire: False
+package_update: true
+packages:
+  - apt-transport-https
+  - elasticsearch
+  - kibana
+write_files:
+  - path: /etc/netplan/99-config.yaml
+    content: |
+      network:
+        version: 2
+        ethernets:
+          ens3:
+            dhcp4: true
+          ens4:
+            addresses:
+            - 192.168.3.2/24
+    owner: root:root
+    permissions: '0644'
+
+  - path: /home/ubuntu/elasticsearch.sh
+    content: |
+      #!/bin/bash
+      /usr/share/elasticsearch/bin/elasticsearch-users useradd privacy_logger -p privacy_logger -r superuser
+      systemctl daemon-reload
+      systemctl enable elasticsearch
+      systemctl start elasticsearch
+    permissions: '0555'
+
+  - path: /home/ubuntu/kibana.sh
+    content: |
+      #!/bin/bash
+      TOKEN=$(/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana)
+      /usr/share/kibana/bin/kibana-setup --enrollment-token "$TOKEN"
+      echo 'server.host: "0.0.0.0"' >> /etc/kibana/kibana.yml
+      /usr/share/kibana/bin/kibana --allow-root
+    permissions: '0555'
+
+bootcmd:
+  - wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elastic-keyring.gpg
+  - echo "deb [signed-by=/usr/share/keyrings/elastic-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-8.x.list
+runcmd:
+  - mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+  - netplan apply
+  - ./home/ubuntu/elasticsearch.sh
+  - ./home/ubuntu/kibana.sh

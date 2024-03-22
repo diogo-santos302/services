@@ -1,0 +1,22 @@
+nsd:
+  nsd:
+  - id: nginx_service_ns
+    name: nginx_service_ns
+    designer: OSM
+    description: Network service for NGINX service with ciphering configuration changes
+    version: '1.0'
+    vnfd-id:
+    - nginx_service_vnf
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: "1"
+        vnfd-id: nginx_service_vnf
+        virtual-link-connectivity:
+        - virtual-link-profile-id: rigourous
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: vnf-mgmt-cp
+    virtual-link-desc:
+    - id: rigourous
+      mgmt-network: true

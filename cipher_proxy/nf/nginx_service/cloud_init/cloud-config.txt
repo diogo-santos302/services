@@ -1,0 +1,80 @@
+#cloud-config
+hostname: nginx
+password: nginx
+chpasswd:
+  expire: False
+package_update: true
+packages:
+  - nginx
+  - openssl
+write_files:
+  - path: /nginx-default
+    content: |
+      server {
+        listen                80;
+        server_name           localhost;
+        return                301 https://$host$request_uri;
+      }
+
+      server {
+        listen                443 ssl;
+
+        root                  /srv;
+        index                 index.html;
+
+        server_name           localhost;
+                                                   
+        ssl_certificate       /etc/nginx/ssl/localhost.crt;
+        ssl_certificate_key   /etc/nginx/ssl/localhost.key;
+        ssl_protocols         TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_ciphers           HIGH:!aNULL:!MD5;
+        ssl_session_timeout   15m;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+      }
+  - path: /srv/index.html
+    content: |
+      <html>
+        <head>
+          <title>NGINX network service</title>
+        </head>
+        <body>
+          <center>
+            <h1>Current ciphers: HIGH:!aNULL:!MD5</h1>
+          </center>
+        </body>
+      </html>
+    permissions: "0666"
+  - path: /change_nginx_ciphers.sh
+    content: |
+      #!/bin/bash
+      NEW_CIPHERS=$(openssl rand -base64 32 | tr -d '\n')
+      NGINX_CONF="/etc/nginx/sites-available/default"
+      INDEX_HTML="/srv/index.html"
+      cp "$NGINX_CONF" "$NGINX_CONF.bak"
+      cp "$INDEX_HTML" "$INDEX_HTML.bak"
+      sed -i "s|ssl_ciphers .*;|ssl_ciphers '$NEW_CIPHERS';|" "$NGINX_CONF"
+      sed -i "s|ciphers: .*<|ciphers: '$NEW_CIPHERS';|" "$INDEX_HTML"
+      /usr/sbin/nginx -t
+      if [ $? -eq 0 ]; then
+          /usr/sbin/service nginx reload
+          echo "Debug: Nginx configuration changed."
+      else
+          cp "$NGINX_CONF.bak" "$NGINX_CONF"
+          cp "$INDEX_HTML.bak" "$INDEX_HTML"
+          echo "Error: Nginx configuration test failed. Restoring the original configuration."
+      fi
+    permissions: "0755"
+  - path: /etc/cron.d/change_nginx_ciphers
+    content: "*/{{ interval }} * * * * root /change_nginx_ciphers.sh >> /var/log/change_nginx_ciphers.log 2>&1"
+    permissions: "0644"
+runcmd:
+  - mkdir -p /etc/nginx/ssl
+  - openssl genpkey -algorithm RSA -aes256 -out /etc/nginx/ssl/localhost.key -pass pass:R#7zLp$2aQ9!
+  - openssl rsa -in /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.key -passin pass:R#7zLp$2aQ9!
+  - openssl req -new -key /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.csr -subj "/CN=localhost"
+  - openssl x509 -req -days 365 -in /etc/nginx/ssl/localhost.csr -signkey /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt
+  - chmod 600 /etc/nginx/ssl/localhost.key
+  - mv /nginx-default /etc/nginx/sites-available/default

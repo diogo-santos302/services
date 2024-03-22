@@ -1,0 +1,63 @@
+vnfd:
+  id: privacy_logger_nginx_vnf
+  product-name: privacy_logger_nginx_vnf
+  description: NGINX Cipher as a Service proxy
+  provider: OSM
+  version: '1.0'
+  mgmt-cp: vnf-cp-mgmt
+  virtual-storage-desc:
+  - id: privacy_logger_nginx_vnf-VM-storage
+    size-of-storage: 20
+  virtual-compute-desc:
+  - id: privacy_logger_nginx_vnf-VM-compute
+    virtual-cpu:
+      num-virtual-cpu: 1
+    virtual-memory:
+      size: 2
+  sw-image-desc:
+  - id: "rigourous-ubuntu"
+    name: "rigourous-ubuntu"
+    image: "rigourous-ubuntu"
+  df:
+  - id: default-df
+    instantiation-level:
+    - id: default-instantiation-level
+      vdu-level:
+      - vdu-id: privacy_logger_nginx_vnf-VM
+        number-of-instances: 1
+    vdu-profile:
+    - id: privacy_logger_nginx_vnf-VM
+      min-number-of-instances: 1
+      max-number-of-instances: 1
+    # At least one VDU need to be specified
+    # Additional VDUs can be created by copying the
+    # VDU descriptor below
+  vdu:
+  - id: privacy_logger_nginx_vnf-VM
+    cloud-init-file: cloud-config.txt
+    name: privacy_logger_nginx_vnf-VM
+    description: privacy_logger_nginx_vnf-VM
+    sw-image-desc: "rigourous-ubuntu"
+    virtual-storage-desc:
+    - privacy_logger_nginx_vnf-VM-storage
+    virtual-compute-desc: privacy_logger_nginx_vnf-VM-compute
+    int-cpd:
+    - id: eth0-int
+      virtual-network-interface-requirement:
+      - name: eth0
+        virtual-interface:
+          type: PARAVIRT
+    - id: eth1-int
+      virtual-network-interface-requirement:
+      - name: eth1
+        virtual-interface:
+          type: PARAVIRT
+  ext-cpd:
+  - id: vnf-cp-mgmt
+    int-cpd:
+      vdu-id: privacy_logger_nginx_vnf-VM
+      cpd: eth0-int
+  - id: vnf-cp-data
+    int-cpd:
+      vdu-id: privacy_logger_nginx_vnf-VM
+      cpd: eth1-int
