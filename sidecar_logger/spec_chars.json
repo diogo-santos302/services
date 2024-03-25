@@ -97,7 +97,7 @@
 {
     "name": "Ingress port",
     "description": "The ingress port (NGINX port).",
-    "valueType": "integer",
+    "valueType": "numeric",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
@@ -108,7 +108,7 @@
     "extensible": false,
     "serviceSpecCharacteristicValue": [
         {
-            "valueType": "integer",
+            "valueType": "numeric",
             "unitOfMeasure": "N/A",
             "isDefault": true,
             "value": 80
@@ -198,13 +198,16 @@
     "mutation": {
         "whatToMove": [
             {
+                "value": 5
+            },
+            {
                 "value": 1
             }
         ],
         "whenToMove": {
             "trigger": "during DDoS attack"
         },
-        "howToMove": "sequential"
+        "howToMove": "smallest"
     }
 }
 ]
