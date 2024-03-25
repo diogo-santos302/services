@@ -7,4 +7,3 @@ KNF-based network service that consists of a sidecar container which reads NGINX
 - Ingress Port
 - TLS suite
 - Log files location
-- VM image
