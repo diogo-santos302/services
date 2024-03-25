@@ -184,6 +184,45 @@
         },
         "howToMove": "sequential"
     }
+},
+{
+    "name": "Bandwidth",
+    "description": "The data transfer rate of the service.",
+    "valueType": "numeric",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 1,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "numeric",
+            "unitOfMeasure": "Mbps",
+            "isDefault": true,
+            "value": 100,
+            "valueFrom": 10,
+            "valueTo": 500,
+            "rangeInterval": "closed",
+            "regex": ""
+        }
+    ],
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueFrom": 10,
+                "valueTo": 500,
+                "rangeInterval": "closed"
+            }
+        ],
+        "whenToMove": {
+            "trigger": "some condition",
+            "interval": 15
+        },
+        "howToMove": "uniformRandom"
+    }
 }
 ]
 }

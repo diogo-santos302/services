@@ -24,5 +24,19 @@
         }
     ],
     "serviceSpecCharRelationship": [],
-    "regex": ""
+    "regex": "",
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueFrom": 10,
+                "valueTo": 500,
+                "rangeInterval": "closed"
+            }
+        ],
+        "whenToMove": {
+            "trigger": "some condition",
+            "interval": 15
+        },
+        "howToMove": "uniformRandom"
+    }
 }
