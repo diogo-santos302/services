@@ -1,0 +1,110 @@
+{
+"serviceSpecCharacteristic": [
+{
+    "name": "SSL protocols",
+    "description": "The SSL protocols used by the NGINX server.",
+    "valueType": "array",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "TLSv1"
+        },
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "TLSv1.1"
+        },
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "TLSv1.2"
+        },
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "TLSv1.3"
+        }
+    ]
+},
+{
+    "name": "SSL ciphers",
+    "description": "The SSL ciphers used by the NGINX server.",
+    "valueType": "string",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "HIGH:!aNULL:!MD5"
+        }
+    ]
+},
+{
+    "name": "Cipher change interval",
+    "description": "The rate at which the ciphers are changed.",
+    "valueType": "integer",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 1,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "numeric",
+            "unitOfMeasure": "min",
+            "isDefault": true,
+            "value": 15
+        }
+    ]
+},
+{
+    "name": "Bandwidth",
+    "description": "The data transfer rate of the service.",
+    "valueType": "numeric",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 1,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "numeric",
+            "unitOfMeasure": "Mbps",
+            "isDefault": true,
+            "value": 100,
+            "valueFrom": 10,
+            "valueTo": 500,
+            "rangeInterval": "closed",
+            "regex": ""
+        }
+    ]
+}
+]
+}
