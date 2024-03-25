@@ -1,9 +1,9 @@
 {
 "serviceSpecCharacteristic": [
 {
-    "name": "SSL protocols",
-    "description": "The SSL protocols used by the NGINX server.",
-    "valueType": "array",
+    "name": "IP anonymization",
+    "description": "Whether to redact the IP addresses of clients of the NGINX server.",
+    "valueType": "boolean",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
@@ -14,34 +14,165 @@
     "extensible": false,
     "serviceSpecCharacteristicValue": [
         {
-            "valueType": "string",
+            "valueType": "boolean",
             "unitOfMeasure": "N/A",
             "isDefault": true,
-            "value": "TLSv1"
-        },
-        {
-            "valueType": "string",
-            "unitOfMeasure": "N/A",
-            "isDefault": true,
-            "value": "TLSv1.1"
-        },
-        {
-            "valueType": "string",
-            "unitOfMeasure": "N/A",
-            "isDefault": true,
-            "value": "TLSv1.2"
-        },
-        {
-            "valueType": "string",
-            "unitOfMeasure": "N/A",
-            "isDefault": true,
-            "value": "TLSv1.3"
+            "value": true
         }
     ]
 },
 {
-    "name": "SSL ciphers",
-    "description": "The SSL ciphers used by the NGINX server.",
+    "name": "VLD1 network",
+    "description": "The network used by VLD1.",
+    "valueType": "string",
+    "configurable": false,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [],
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "value": "192.168.1.0/24"
+            }
+        ],
+        "whenToMove": {
+            "interval": 60
+        },
+        "howToMove": "mask30"
+    }
+},
+{
+    "name": "VLD2 network",
+    "description": "The network used by VLD2.",
+    "valueType": "string",
+    "configurable": false,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [],
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "value": "192.168.2.0/24"
+            }
+        ],
+        "whenToMove": {
+            "interval": 60
+        },
+        "howToMove": "mask30"
+    }
+},
+{
+    "name": "VLD3 network",
+    "description": "The network used by VLD3.",
+    "valueType": "string",
+    "configurable": false,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [],
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "value": "192.168.3.0/24"
+            }
+        ],
+        "whenToMove": {
+            "interval": 60
+        },
+        "howToMove": "mask30"
+    }
+},
+{
+    "name": "NGINX-Classifier syslog port",
+    "description": "The port used for syslog between the NGINX VNF and the Privacy Classifier VNF.",
+    "valueType": "integer",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "numeric",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": 514
+        }
+    ],
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueFrom": 514,
+                "valueTo": 10514,
+                "rangeInterval": "closedBottom"
+            }
+        ],
+        "whenToMove": {
+            "interval": 2
+        },
+        "howToMove": "normalRandom"
+    }
+},
+{
+    "name": "Classifier-Redactor syslog port",
+    "description": "The port used for syslog between the Privacy Classifier VNF and the Log Redactor VNF.",
+    "valueType": "integer",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "numeric",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": 10514
+        }
+    ],
+    "mutation": {
+        "whatToMove": [
+            {
+                "valueFrom": 10514,
+                "valueTo": 11000,
+                "rangeInterval": "closed"
+            }
+        ],
+        "whenToMove": {
+            "interval": 3
+        },
+        "howToMove": "normalRandom"
+    }
+},
+{
+    "name": "Syslog protocol",
+    "description": "The protocol used for syslog, when applicable.",
     "valueType": "string",
     "configurable": true,
     "validFor": {
@@ -56,69 +187,28 @@
             "valueType": "string",
             "unitOfMeasure": "N/A",
             "isDefault": true,
-            "value": "HIGH:!aNULL:!MD5"
-        }
-    ]
-},
-{
-    "name": "Cipher change interval",
-    "description": "The rate at which the ciphers are changed.",
-    "valueType": "integer",
-    "configurable": true,
-    "validFor": {
-        "startDate": "25/03/2024 10:33",
-        "endDate": "25/03/2044 10:33"
-    },
-    "minCardinality": 1,
-    "maxCardinality": 1,
-    "extensible": false,
-    "serviceSpecCharacteristicValue": [
-        {
-            "valueType": "numeric",
-            "unitOfMeasure": "min",
-            "isDefault": true,
-            "value": 15
-        }
-    ]
-},
-{
-    "name": "NGINX port",
-    "description": "The port used by the NGINX server.",
-    "valueType": "numeric",
-    "configurable": true,
-    "validFor": {
-        "startDate": "25/03/2024 10:33",
-        "endDate": "25/03/2044 10:33"
-    },
-    "minCardinality": 0,
-    "maxCardinality": 1,
-    "extensible": false,
-    "serviceSpecCharacteristicValue": [
-        {
-            "valueType": "numeric",
-            "unitOfMeasure": "N/A",
-            "isDefault": true,
-            "value": 80
+            "value": "TCP"
         }
     ],
     "mutation": {
         "whatToMove": [
             {
-                "valueFrom": 8000,
-                "valueTo": 9000,
-                "rangeInterval": "closed"
+                "value": "UDP"
+            },
+            {
+                "value": "TCP"
             }
         ],
         "whenToMove": {
-            "interval": 15
+            "interval": 120
         },
         "howToMove": "uniformRandom"
     }
 },
 {
-    "name": "NGINX session timeout",
-    "description": "The timeout of a SSL session in NGINX.",
-    "valueType": "numeric",
+    "name": "ELK user",
+    "description": "The user with superuser privileges to the ELK stack.",
+    "valueType": "string",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
@@ -129,26 +219,15 @@
     "extensible": false,
     "serviceSpecCharacteristicValue": [
         {
-            "valueType": "numeric",
-            "unitOfMeasure": "min",
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
             "isDefault": true,
-            "value": 5
+            "value": "privacy_logger"
         }
-    ],
-    "mutation": {
-        "whatToMove": [
-            {
-                "value": 1
-            }
-        ],
-        "whenToMove": {
-            "trigger": "during DDoS attack"
-        },
-        "howToMove": "sequential"
-    }
+    ]
 },
 {
-    "name": "Virtual machine image",
+    "name": "NGINX virtual machine image",
     "description": "The image used by the VNF running the NGINX server.",
     "valueType": "string",
     "configurable": true,
@@ -186,42 +265,117 @@
     }
 },
 {
-    "name": "Bandwidth",
-    "description": "The data transfer rate of the service.",
-    "valueType": "numeric",
+    "name": "Log Collector virtual machine image",
+    "description": "The image used by the VNF running the Log Collector.",
+    "valueType": "string",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
         "endDate": "25/03/2044 10:33"
     },
-    "minCardinality": 1,
+    "minCardinality": 0,
     "maxCardinality": 1,
     "extensible": false,
     "serviceSpecCharacteristicValue": [
         {
-            "valueType": "numeric",
-            "unitOfMeasure": "Mbps",
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
             "isDefault": true,
-            "value": 100,
-            "valueFrom": 10,
-            "valueTo": 500,
-            "rangeInterval": "closed",
-            "regex": ""
+            "value": "rigourous-ubuntu"
         }
     ],
     "mutation": {
         "whatToMove": [
             {
-                "valueFrom": 10,
-                "valueTo": 500,
-                "rangeInterval": "closed"
+                "value": "ubuntu20.04"
+            },
+            {
+                "value": "ubuntu22.04"
+            },
+            {
+                "value": "centos"
             }
         ],
         "whenToMove": {
-            "trigger": "some condition",
-            "interval": 15
+            "interval": 1440
         },
-        "howToMove": "uniformRandom"
+        "howToMove": "sequential"
+    }
+},
+{
+    "name": "Privacy Classifier virtual machine image",
+    "description": "The image used by the VNF running the Privacy Classifier.",
+    "valueType": "string",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "rigourous-ubuntu"
+        }
+    ],
+    "mutation": {
+        "whatToMove": [
+            {
+                "value": "ubuntu20.04"
+            },
+            {
+                "value": "ubuntu22.04"
+            },
+            {
+                "value": "centos"
+            }
+        ],
+        "whenToMove": {
+            "interval": 1440
+        },
+        "howToMove": "sequential"
+    }
+},
+{
+    "name": "Log Redactor virtual machine image",
+    "description": "The image used by the VNF running the Log Redactor.",
+    "valueType": "string",
+    "configurable": true,
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "minCardinality": 0,
+    "maxCardinality": 1,
+    "extensible": false,
+    "serviceSpecCharacteristicValue": [
+        {
+            "valueType": "string",
+            "unitOfMeasure": "N/A",
+            "isDefault": true,
+            "value": "rigourous-ubuntu"
+        }
+    ],
+    "mutation": {
+        "whatToMove": [
+            {
+                "value": "ubuntu20.04"
+            },
+            {
+                "value": "ubuntu22.04"
+            },
+            {
+                "value": "centos"
+            }
+        ],
+        "whenToMove": {
+            "interval": 1440
+        },
+        "howToMove": "sequential"
     }
 }
 ]
