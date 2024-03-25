@@ -1,0 +1,302 @@
+{
+    "name": "Cipher proxy",
+    "description": "A NGINX service which can receive configurations to change its ciphering suite.",
+    "version": "0.1.0",
+    "attachment": [],
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "serviceSpecCharacteristic": [
+    {
+        "name": "SSL protocols",
+        "description": "The SSL protocols used by the NGINX server.",
+        "valueType": "array",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.1"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.2"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.3"
+            }
+        ]
+    },
+    {
+        "name": "SSL ciphers",
+        "description": "The SSL ciphers used by the NGINX server.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "HIGH:!aNULL:!MD5"
+            }
+        ]
+    },
+    {
+        "name": "Cipher change interval",
+        "description": "The rate at which the ciphers are changed.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 1,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 15
+            }
+        ]
+    },
+    {
+        "name": "NGINX port",
+        "description": "The port used by the NGINX server.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": 80,
+                "valueFrom": 8000,
+                "valueTo": 9000,
+                "rangeInterval": "closed"
+            }
+        ]
+    },
+    {
+        "name": "When to move NGINX port",
+        "description": "The trigger or time interval for moving the NGINX port",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 15
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "NGINX port"
+            }
+        ]
+    },
+    {
+        "name": "How to move NGINX port",
+        "description": "The algorithm for moving the NGINX port",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "NGINX port"
+            }
+        ]
+    },
+    {
+        "name": "NGINX session timeout",
+        "description": "The timeout of a SSL session in NGINX.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 5
+            },
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": false,
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "When to move NGINX session timeout",
+        "description": "The trigger or time interval for moving the NGINX session timeout",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "during DDoS attack"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "NGINX session timeout"
+            }
+        ]
+    },
+    {
+        "name": "How to move NGINX session timeout",
+        "description": "The algorithm for moving the NGINX session timeout",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "smallest"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "NGINX session timeout"
+            }
+        ]
+    },
+    {
+        "name": "Virtual machine image",
+        "description": "The image used by the VNF running the NGINX server.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "rigourous-ubuntu"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu20.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu22.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "centos"
+            }
+        ]
+    },
+    {
+        "name": "When to move virtual machine image",
+        "description": "The trigger or time interval for moving the virtual machine image",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "day",
+                "isDefault": true,
+                "value": 1
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "How to move virtual machine image",
+        "description": "The algorithm for moving the virtual machine image",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "sequential"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Virtual machine image"
+            }
+        ]
+    }]
+}

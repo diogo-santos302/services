@@ -1,0 +1,316 @@
+{
+    "name": "Sidecar logger",
+    "description": "Sidecar container that collects NGINX logs from the main container and offers them to a Logstash server.",
+    "version": "0.1.0",
+    "attachment": [],
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "serviceSpecCharacteristic": [
+    {
+        "name": "Logstash IP",
+        "description": "IP address of the Logstash server.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 1,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": ""
+            }
+        ]
+    },
+    {
+        "name": "NGINX image",
+        "description": "The NGINX container image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "nginx:1.16.0"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "bitnami/nginx:15.14.0"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu/nginx"
+            }
+        ]
+    },
+    {
+        "name": "When to move NGINX image",
+        "description": "The trigger or time interval for moving the NGINX image.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 60
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "NGINX image"
+            }
+        ]
+    },
+    {
+        "name": "How to move NGINX image",
+        "description": "The algorithm for moving the NGINX image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "NGINX image"
+            }
+        ]
+    },
+    {
+        "name": "Filebeat image",
+        "description": "The Filebeat container image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "elastic/filebeat:8.12.2"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "chainguard/filebeat"
+            }
+        ]
+    },
+    {
+        "name": "When to move Filebeat image",
+        "description": "The trigger or time interval for moving the Filebeat image.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 90
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Filebeat image"
+            }
+        ]
+    },
+    {
+        "name": "How to move Filebeat image",
+        "description": "The algorithm for moving the Filebeat image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Filebeat image"
+            }
+        ]
+    },
+    {
+        "name": "Ingress port",
+        "description": "The ingress port (NGINX port).",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": 80
+            }
+        ]
+    },
+    {
+        "name": "SSL protocols",
+        "description": "The SSL protocols used by the NGINX server.",
+        "valueType": "array",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.1"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.2"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.3"
+            }
+        ]
+    },
+    {
+        "name": "SSL ciphers",
+        "description": "The SSL ciphers used by the NGINX server.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "HIGH:!aNULL:!MD5"
+            }
+        ]
+    },
+    {
+        "name": "NGINX session timeout",
+        "description": "The timeout of a SSL session in NGINX.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 5
+            },
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": false,
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "When to move NGINX session timeout",
+        "description": "The trigger or time interval for moving the NGINX session timeout",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "during DDoS attack"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "NGINX session timeout"
+            }
+        ]
+    },
+    {
+        "name": "How to move NGINX session timeout",
+        "description": "The algorithm for moving the NGINX session timeout",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "smallest"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "NGINX session timeout"
+            }
+        ]
+    }]
+}

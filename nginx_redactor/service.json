@@ -1,0 +1,797 @@
+{
+    "name": "NGINX redactor",
+    "description": "Service that takes logs from NGINX, anonymizes and offers them through an ELK stack.",
+    "version": "0.1.0",
+    "attachment": [],
+    "validFor": {
+        "startDate": "25/03/2024 10:33",
+        "endDate": "25/03/2044 10:33"
+    },
+    "serviceSpecCharacteristic": [
+    {
+        "name": "IP anonymization",
+        "description": "Whether to redact the IP addresses of clients of the NGINX server.",
+        "valueType": "boolean",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "boolean",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": true
+            }
+        ]
+    },
+    {
+        "name": "VLD1 network",
+        "description": "The network used by VLD1.",
+        "valueType": "string",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "192.168.1.0/24"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "192.168.4.0/24"
+            }
+        ]
+    },
+    {
+        "name": "When to move VLD1 network",
+        "description": "The trigger or time interval for moving the VLD1 network.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 60
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "VLD1 network"
+            }
+        ]
+    },
+    {
+        "name": "How to move VLD1 network",
+        "description": "The algorithm for moving the VLD1 network.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "VLD1 network"
+            }
+        ]
+    },
+    {
+        "name": "VLD2 network",
+        "description": "The network used by VLD2.",
+        "valueType": "string",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "192.168.2.0/24"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "192.168.6.0/24"
+            }
+        ]
+    },
+    {
+        "name": "When to move VLD2 network",
+        "description": "The trigger or time interval for moving the VLD2 network.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "hour",
+                "isDefault": true,
+                "value": 1
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "VLD2 network"
+            }
+        ]
+    },
+    {
+        "name": "How to move VLD2 network",
+        "description": "The algorithm for moving the VLD2 network.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "VLD2 network"
+            }
+        ]
+    },
+    {
+        "name": "VLD3 network",
+        "description": "The network used by VLD3.",
+        "valueType": "string",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "192.168.3.0/24"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "192.168.8.0/24"
+            }
+        ]
+    },
+    {
+        "name": "When to move VLD3 network",
+        "description": "The trigger or time interval for moving the VLD3 network.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 60
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "VLD3 network"
+            }
+        ]
+    },
+    {
+        "name": "How to move VLD3 network",
+        "description": "The algorithm for moving the VLD3 network.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "VLD3 network"
+            }
+        ]
+    },
+    {
+        "name": "NGINX-Classifier syslog port",
+        "description": "The port used for syslog between the NGINX VNF and the Privacy Classifier VNF.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": 514,
+                "valueFrom": 514,
+                "valueTo": 10514,
+                "rangeInterval": "closedBottom"
+            }
+        ]
+    },
+    {
+        "name": "When to move NGINX-Classifier syslog port",
+        "description": "The trigger or time interval for moving the NGINX-Classifier syslog port.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 2
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "NGINX-Classifier syslog port"
+            }
+        ]
+    },
+    {
+        "name": "How to move NGINX-Classifier syslog port",
+        "description": "The algorithm for moving the NGINX-Classifier syslog port.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "normalRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "NGINX-Classifier syslog port"
+            }
+        ]
+    },
+    {
+        "name": "Classifier-Redactor syslog port",
+        "description": "The port used for syslog between the Privacy Classifier VNF and the Log Redactor VNF.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": 10514,
+                "valueFrom": 10514,
+                "valueTo": 11000,
+                "rangeInterval": "closed"
+            }
+        ]
+    },
+    {
+        "name": "When to move Classifier-Redactor syslog port",
+        "description": "The trigger or time interval for moving the Classifier-Redactor syslog port.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 3
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Classifier-Redactor syslog port"
+            }
+        ]
+    },
+    {
+        "name": "How to move Classifier-Redactor syslog port",
+        "description": "The algorithm for moving the Classifier-Redactor syslog port.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "normalRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Classifier-Redactor syslog port"
+            }
+        ]
+    },
+    {
+        "name": "Syslog protocol",
+        "description": "The protocol used for syslog, when applicable.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TCP"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "UDP"
+            }
+        ]
+    },
+    {
+        "name": "When to move syslog protocol",
+        "description": "The trigger or time interval for moving the syslog protocol.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 120
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Syslog protocol"
+            }
+        ]
+    },
+    {
+        "name": "How to move syslog protocol",
+        "description": "The algorithm for moving the syslog protocol.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "uniformRandom"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Syslog protocol"
+            }
+        ]
+    },
+    {
+        "name": "ELK user",
+        "description": "The user with superuser privileges to the ELK stack.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "privacy_logger"
+            }
+        ]
+    },
+    {
+        "name": "NGINX virtual machine image",
+        "description": "The image used by the VNF running the NGINX server.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "rigourous-ubuntu"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu20.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu22.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "centos"
+            }
+        ]
+    },
+    {
+        "name": "When to move NGINX image",
+        "description": "The trigger or time interval for moving the NGINX image.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 1440
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "NGINX virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "How to move NGINX image",
+        "description": "The algorithm for moving the NGINX image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "sequential"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "NGINX virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "Log Collector virtual machine image",
+        "description": "The image used by the VNF running the Log Collector.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "rigourous-ubuntu"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu20.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu22.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "centos"
+            }
+        ]
+    },
+    {
+        "name": "When to move Log Collector image",
+        "description": "The trigger or time interval for moving the Log Collector image.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 1440
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Log Collector virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "How to move Log Collector image",
+        "description": "The algorithm for moving the Log Collector image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "sequential"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Log Collector virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "Privacy Classifier virtual machine image",
+        "description": "The image used by the VNF running the Privacy Classifier.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "rigourous-ubuntu"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu20.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu22.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "centos"
+            }
+        ]
+    },
+    {
+        "name": "When to move Privacy Classifier image",
+        "description": "The trigger or time interval for moving the Privacy Classifier image.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 1440
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Privacy Classifier virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "How to move Privacy Classifier image",
+        "description": "The algorithm for moving the Privacy Classifier image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "sequential"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Privacy Classifier virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "Log Redactor virtual machine image",
+        "description": "The image used by the VNF running the Log Redactor.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "rigourous-ubuntu"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu20.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "ubuntu22.04"
+            },
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": false,
+                "value": "centos"
+            }
+        ]
+    },
+    {
+        "name": "When to move Log Redactor image",
+        "description": "The trigger or time interval for moving the Log Redactor image.",
+        "valueType": "numeric",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "numeric",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 1440
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "when to move",
+                "name": "Log Redactor virtual machine image"
+            }
+        ]
+    },
+    {
+        "name": "How to move Log Redactor image",
+        "description": "The algorithm for moving the Log Redactor image.",
+        "valueType": "string",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "string",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "sequential"
+            }
+        ],
+        "serviceSpecCharRelationship": [
+            {
+                "relationshipType": "mutation",
+                "role": "how to move",
+                "name": "Log Redactor virtual machine image"
+            }
+        ]
+    }]
+}
