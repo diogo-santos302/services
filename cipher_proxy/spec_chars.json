@@ -63,7 +63,7 @@
 {
     "name": "Cipher change interval",
     "description": "The rate at which the ciphers are changed.",
-    "valueType": "integer",
+    "valueType": "numeric",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
@@ -138,13 +138,16 @@
     "mutation": {
         "whatToMove": [
             {
+                "value": 5
+            },
+            {
                 "value": 1
             }
         ],
         "whenToMove": {
             "trigger": "during DDoS attack"
         },
-        "howToMove": "sequential"
+        "howToMove": "smallest"
     }
 },
 {
