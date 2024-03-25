@@ -121,7 +121,7 @@
         {
             "valueType": "numeric",
             "unitOfMeasure": "min",
-            "isDefault": false,
+            "isDefault": true,
             "value": 15
         }
     ],
@@ -149,7 +149,7 @@
         {
             "valueType": "string",
             "unitOfMeasure": "N/A",
-            "isDefault": false,
+            "isDefault": true,
             "value": "uniformRandom"
         }
     ],
@@ -204,7 +204,7 @@
         {
             "valueType": "string",
             "unitOfMeasure": "N/A",
-            "isDefault": false,
+            "isDefault": true,
             "value": "during DDoS attack"
         }
     ],
@@ -232,7 +232,7 @@
         {
             "valueType": "string",
             "unitOfMeasure": "N/A",
-            "isDefault": false,
+            "isDefault": true,
             "value": "smallest"
         }
     ],
@@ -299,7 +299,7 @@
         {
             "valueType": "numeric",
             "unitOfMeasure": "day",
-            "isDefault": false,
+            "isDefault": true,
             "value": 1
         }
     ],
@@ -327,7 +327,7 @@
         {
             "valueType": "string",
             "unitOfMeasure": "N/A",
-            "isDefault": false,
+            "isDefault": true,
             "value": "sequential"
         }
     ],

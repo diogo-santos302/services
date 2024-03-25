@@ -105,7 +105,7 @@
 {
     "name": "NGINX-Classifier syslog port",
     "description": "The port used for syslog between the NGINX VNF and the Privacy Classifier VNF.",
-    "valueType": "integer",
+    "valueType": "numeric",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
@@ -139,7 +139,7 @@
 {
     "name": "Classifier-Redactor syslog port",
     "description": "The port used for syslog between the Privacy Classifier VNF and the Log Redactor VNF.",
-    "valueType": "integer",
+    "valueType": "numeric",
     "configurable": true,
     "validFor": {
         "startDate": "25/03/2024 10:33",
