@@ -1,0 +1,48 @@
+service:
+  name: "Cipher proxy"
+  description: "A NGINX service which can receive configurations to change its ciphering suite."
+  version: "0.1.0"
+  validFor:
+    startDate: "25/03/2024 10:33"
+    endDate: "25/03/2044 10:33"
+  characteristics:
+  - name: "SSL protocols" 
+    description: "The SSL protocols used by the NGINX server."
+    default: ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
+  - name: "SSL ciphers"
+    description: "The SSL ciphers used by the NGINX server."
+    default: "HIGH:!aNULL:!MD5"
+  - name: "Cipher change interval"
+    description: "The rate at which the ciphers are changed."
+    default: 15
+    unit: "min"
+  - name: "NGINX port"
+    description: "The port used by the NGINX server."
+    default: 80
+    whatToMove:
+      start: 8000
+      end: 9000
+    whenToMove:
+      periodic:
+        value: 15
+        unit: "min"
+    howToMove: "uniform"
+  - name: "NGINX session timeout"
+    description: "The timeout of a SSL session in NGINX."
+    default: 5
+    unit: "min"
+    whatToMove:
+      values: [1, 5]
+    whenToMove:
+      condition: "ddosAttack"
+    howToMove: "smallest"
+  - name: "VM image"
+    description: "The image used by the VNF running the NGINX server."
+    default: "rigourous-ubuntu"
+    whatToMove:
+      values: ["rigourous-ubuntu", "ubuntu20.04", "ubuntu22.04", "centos"]
+    whenToMove:
+      periodic:
+        value: 1440
+        unit: "min"
+    howToMove: "sequential"

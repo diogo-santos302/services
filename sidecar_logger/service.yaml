@@ -1,0 +1,47 @@
+service:
+  name: "Sidecar logger"
+  description: "Sidecar container that collects NGINX logs from the main container and offers them to a Logstash server."
+  version: "0.1.0"
+  validFor:
+    startDate: "25/03/2024 10:33"
+    endDate: "25/03/2044 10:33"
+  characteristics:
+  - name: "Logstash IP" 
+    description: "IP address of the Logstash server."
+  - name: "NGINX image"
+    description: "The NGINX container image."
+    default: "nginx:1.16.0"
+    whatToMove:
+      values: ["nginx:1.16.0", "bitnami/nginx:15.14.0", "ubuntu/nginx"]
+    whenToMove:
+      periodic:
+        value: 60
+        unit: "min"
+    howToMove: "uniform"
+  - name: "Filebeat image"
+    description: "The Filebeat container image."
+    default: "elastic/filebeat:8.12.2"
+    whatToMove:
+      values: ["elastic/filebeat:8.12.2", "chainguard/filebeat"]
+    whenToMove:
+      periodic:
+        value: 90
+        unit: "min"
+    howToMove: "uniform"
+  - name: "Ingress port"
+    description: "The ingress port (NGINX port)."
+    default: 80
+  - name: "SSL protocols"
+    description: "The SSL protocols used by the NGINX server."
+    default: ["TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"]
+  - name: "SSL ciphers"
+    description: "The SSL ciphers used by the NGINX server."
+    default: "HIGH:!aNULL:!MD5"
+  - name: "NGINX session timeout"
+    description: "The timeout of a SSL session in NGINX."
+    default: 5
+    whatToMove:
+      values: [1, 5]
+    whenToMove:
+      condition: "ddosAttack"
+    howToMove: "smallest"
