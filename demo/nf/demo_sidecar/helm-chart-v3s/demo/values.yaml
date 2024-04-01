@@ -1,0 +1,160 @@
+# Default values for demo.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+webrtc:
+  name: webrtc
+  repository: canyan/janus-gateway
+  pullPolicy: IfNotPresent
+  port:
+    name: webrtcport
+    value: 8188
+  logFile: /var/log/janus/janus.log
+
+logstash:
+  name: logstash
+  repository: logstash
+  pullPolicy: IfNotPresent
+  tag: "8.13.0"
+  port:
+    name: logstashport
+    value: 9600
+
+nginx:
+  name: my-nginx
+  repository: diogosantosua/nginx-python
+  pullPolicy: IfNotPresent
+  tag: "latest"
+  ports:
+    http: 80
+    https: 443
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+service:
+  type: ClusterIP
+  port: 8188
+
+ingress:
+  enabled: true
+  className: "traefik"
+  hosts:
+    - host: example.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: traefik-default-cert
+  #    hosts:
+  #      - chart-example.local
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nginxVolumes:
+- name: nginx-conf-volume
+  configMap: 
+    name: nginx-conf
+- name: index-html-volume
+  configMap:
+    name: index-html-conf
+- name: index-js-volume
+  configMap:
+    name: index-js-conf
+- name: janus-js-volume
+  configMap:
+    name: janus-js-conf
+- name: settings-js-volume
+  configMap:
+    name: settings-js-conf
+
+nginxVolumeMounts:
+- name: nginx-conf-volume
+  mountPath: /etc/nginx/nginx.conf
+  subPath: nginx.conf
+- name: index-html-volume
+  mountPath: /etc/nginx/html/echotest.html
+  subPath: echotest.html
+- name: index-js-volume
+  mountPath: /etc/nginx/html/echotest.js
+  subPath: echotest.js
+- name: janus-js-volume
+  mountPath: /etc/nginx/html/janus.js
+  subPath: janus.js
+- name: settings-js-volume
+  mountPath: /etc/nginx/html/settings.js
+  subPath: settings.js
+
+webrtcVolumes:
+- name: janus-conf-volume
+  configMap: 
+    name: janus-conf
+
+webrtcVolumeMounts:
+- name: janus-conf-volume
+  mountPath: /usr/local/etc/janus/janus.jcfg
+  subPath: janus.jcfg
+
+logstashVolumes:
+- name: logstash-conf-volume
+  configMap: 
+    name: logstash-conf
+- name: logstash-pipeline-volume
+  configMap: 
+    name: logstash-pipeline
+
+logstashVolumeMounts:
+- name: logstash-conf-volume
+  mountPath: /usr/share/logstash/config/logstash.yml
+  subPath: logstash.yml
+- name: logstash-pipeline-volume
+  mountPath: /usr/share/logstash/pipeline/logstash.conf
+  subPath: logstash.conf
+
+sharedVolumes:
+- name: janus-logs-volume
+  emptyDir: {}
+
+sharedVolumeMounts:
+- name: janus-logs-volume
+  mountPath: /var/log/janus
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

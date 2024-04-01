@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nginx.name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.nginx.ports.http }}
+      targetPort: {{ .Values.nginx.ports.http }}
+      protocol: TCP
+      name: http
+  selector:
+    rigourous.service: {{ .Values.nginx.name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.webrtc.name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.webrtc.port.value }}
+      targetPort: {{ .Values.webrtc.port.value }}
+      protocol: TCP
+      name: {{ .Values.webrtc.port.name }}
+  selector:
+    rigourous.service: {{ .Values.webrtc.name }}

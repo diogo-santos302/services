@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-pipeline
+data:
+  logstash.conf: |
+    input {
+        file {
+            path => "/var/log/janus/janus.log"
+        }
+    }
+
+    filter {
+        grok {
+            match => { "message" => "\[%{DAY:day} %{MONTH:month} %{MONTHDAY:monthday} %{TIME:time} %{YEAR:year}\](?: \[%{WORD:severity}\])? %{GREEDYDATA:message}" }
+        }
+    }
+
+    output {
+        stdout { codec => rubydebug }
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-conf
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  nginx.conf: |
+    worker_processes 1;
+
+    events { 
+        worker_connections 1024; 
+    }
+
+    http {
+        server {
+            listen 80;
+            server_name _;
+            return 301 https://$host$request_uri;
+        }
+
+        server {
+            listen 443 ssl;
+            server_name _;
+
+            ssl_certificate     /etc/nginx/ssl/localhost.crt;
+            ssl_certificate_key /etc/nginx/ssl/localhost.key;
+            ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+            ssl_ciphers         HIGH:!aNULL:!MD5;
+
+            location /echotest {
+                root html;
+                index echotest.html;
+            }
+        }
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-html-conf
+data:
+  echotest.html: |
+    {{- include "demo.indexHtml" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-js-conf
+data:
+  echotest.js: |
+    {{- include "demo.indexJs" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: janus-js-conf
+data:
+  janus.js: |
+    {{- include "demo.janusJs" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: settings-js-conf
+data:
+  settings.js: |
+    {{- include "demo.settingsJs" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: janus-conf
+data:
+  janus.jcfg: |
+    {{- include "demo.janusJcfg" . | nindent 4 }}

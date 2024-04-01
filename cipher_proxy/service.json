@@ -90,7 +90,7 @@
                 "valueType": "numeric",
                 "unitOfMeasure": "N/A",
                 "isDefault": true,
-                "value": 80,
+                "value": 443,
                 "valueFrom": 8000,
                 "valueTo": 9000,
                 "rangeInterval": "closed"

@@ -1,0 +1,18 @@
+vnfd:
+  description: KNF with single KDU using a helm-chart for demo version 1.2.3
+  df:
+  - id: default-df
+  ext-cpd:
+  - id: mgmt-ext
+    k8s-cluster-net: mgmtnet
+  id: demo_knf
+  k8s-cluster:
+    nets:
+    - id: mgmtnet
+  kdu:
+  - name: demo
+    helm-chart: stable/demo
+  mgmt-cp: mgmt-ext
+  product-name: demo_knf
+  provider: RIGOUROUS
+  version: 1.0
