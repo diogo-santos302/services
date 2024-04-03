@@ -5,14 +5,9 @@ chpasswd:
   expire: False
 package_update: true
 packages:
-  - nginx
   - python3
-  - python3-pip
-  - build-essential
-  - libssl-dev
-  - python3-cryptography
 write_files:
-  - path: /etc/nginx/nginx.conf
+  - path: /app/nginx.conf
     content: |
       worker_processes 1;
 
@@ -37,7 +32,7 @@ write_files:
               ssl_ciphers         HIGH:!aNULL:!MD5;
 
               location / {
-                  root html;
+                  root /etc/nginx/html;
                   index echotest.html;
               }
           }
@@ -45,7 +40,7 @@ write_files:
 
   - path: /etc/cron.d/cronjob
     content: |
-      * * * * * python3 /app/main.py && /usr/sbin/service nginx reload >> /var/log/cron.log 2>&1
+      */{{ interval }} * * * * python3 /app/main.py && /usr/sbin/service nginx reload >> /var/log/cron.log 2>&1
     permissions: "0644"
 
   - path: /app/main.py
@@ -57,10 +52,12 @@ write_files:
       from cryptography import x509
       from cryptography.x509.oid import NameOID
       from cryptography.hazmat.primitives import hashes
+      from cryptography.hazmat.backends import default_backend
 
       key = rsa.generate_private_key(
           public_exponent=65537,
           key_size=2048,
+          backend=default_backend()
       )
 
       with open("/etc/nginx/ssl/localhost.key", "wb") as f:
@@ -93,7 +90,7 @@ write_files:
       ).add_extension(
           x509.SubjectAlternativeName([x509.DNSName("localhost")]),
           critical=False,
-      ).sign(key, hashes.SHA256())
+      ).sign(key, hashes.SHA256(), default_backend())
 
       with open("/etc/nginx/ssl/localhost.crt", "wb") as f:
           f.write(cert.public_bytes(serialization.Encoding.PEM))
@@ -112,6 +109,11 @@ write_files:
     append: true
 runcmd:
   - mkdir -p /etc/nginx/ssl
+  - wget -P /etc/nginx/html https://raw.githubusercontent.com/diogo-santos302/services/main/demo/src/echotest.html
+  - wget -P /etc/nginx/html https://raw.githubusercontent.com/diogo-santos302/services/main/demo/src/echotest.js
+  - wget -P /etc/nginx/html https://raw.githubusercontent.com/diogo-santos302/services/main/demo/src/janus.js
   - python3 /app/main.py
   - crontab /etc/cron.d/cronjob
-  - service cron start && nginx -g 'daemon off;'
+  - apt-get install -y nginx
+  - mv /app/nginx.conf /etc/nginx/nginx.conf
+  - service cron start

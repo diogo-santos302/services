@@ -1,0 +1,25 @@
+nsd:
+  nsd:
+  - id: demo_knf_ns
+    name: demo_knf_ns
+    designer: RIGOUROUS
+    description: Janus WebRTC server with Logstash sidecar for log collection and anonymization
+    version: '1.0'
+    vnfd-id:
+    - demo_knf
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: "1"
+        vnfd-id: demo_knf
+        virtual-link-connectivity:
+        - virtual-link-profile-id: mgmtnet
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: mgmt-ext
+    virtual-link-desc:
+    - id: mgmtnet
+      mgmt-network: true
+    # sapd:
+    # - id: nsd_cp0
+    #   virtual-link-desc: sidecar_ns_vld0

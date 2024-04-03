@@ -1,0 +1,8 @@
+vld:
+- name: mgmtnet
+  vim-network-name: my-vim-network
+additionalParamsForVnf:
+- member-vnf-index: "1"
+  additionalParams:
+    interval: 2
+
