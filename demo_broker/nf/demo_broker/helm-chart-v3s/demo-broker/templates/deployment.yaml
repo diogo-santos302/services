@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.broker.name }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      rigourous.service: {{ .Values.broker.name }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        rigourous.service: {{ .Values.broker.name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "demo_broker.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.broker.name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.broker.repository }}:{{ .Values.broker.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.broker.pullPolicy }}
+          env:
+          - name: EMQX_LOG__FILE__ENABLE
+            value: "true"
+          - name: EMQX_LOG__FILE__LEVEL
+            value: "info"
+          - name: EMQX_LOG__FILE__PATH
+            value: "/var/log/{{ .Values.broker.name }}/{{ .Values.broker.name }}.log"
+          - name: EMQX_LOG__CONSOLE__ENABLE
+            value: "true"
+          ports:
+            - name: {{ .Values.broker.port.name }}
+              containerPort: {{ .Values.broker.port.value }}
+              protocol: TCP
+            - name: dashboard
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          {{- with .Values.brokerVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sharedVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        - name: {{ .Values.sidecar.name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.sidecar.repository }}:{{ .Values.sidecar.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.sidecar.pullPolicy }}
+          ports:
+            - name: {{ .Values.sidecar.port.name }}
+              containerPort: {{ .Values.sidecar.port.value }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          {{- with .Values.sidecarVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sharedVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- with .Values.brokerVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sidecarVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sharedVolumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

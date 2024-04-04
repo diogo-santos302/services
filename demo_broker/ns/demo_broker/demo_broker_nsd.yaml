@@ -1,17 +1,17 @@
 nsd:
   nsd:
-  - id: demo_knf_ns
-    name: demo_knf_ns
+  - id: demo_broker_ns
+    name: demo_broker_ns
     designer: RIGOUROUS
-    description: Janus WebRTC server with Logstash sidecar for log collection and anonymization
+    description: EMQX broker with a Logstash sidecar for log collection and anonymization
     version: '1.0'
     vnfd-id:
-    - demo_knf
+    - demo_broker_knf
     df:
     - id: default-df
       vnf-profile:
       - id: "1"
-        vnfd-id: demo_knf
+        vnfd-id: demo_broker_knf
         virtual-link-connectivity:
         - virtual-link-profile-id: mgmtnet
           constituent-cpd-id:
@@ -20,3 +20,6 @@ nsd:
     virtual-link-desc:
     - id: mgmtnet
       mgmt-network: true
+    # sapd:
+    # - id: nsd_cp0
+    #   virtual-link-desc: demo_broker_ns_vld0

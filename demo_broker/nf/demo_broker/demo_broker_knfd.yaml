@@ -1,0 +1,18 @@
+vnfd:
+  description: EMQX broker with a Logstash sidecar for log collection and anonymization
+  df:
+  - id: default-df
+  ext-cpd:
+  - id: mgmt-ext
+    k8s-cluster-net: mgmtnet
+  id: demo_broker_knf
+  k8s-cluster:
+    nets:
+    - id: mgmtnet
+  kdu:
+  - name: demo_broker
+    helm-chart: demo-broker
+  mgmt-cp: mgmt-ext
+  product-name: demo_broker_knf
+  provider: RIGOUROUS
+  version: 1.0
