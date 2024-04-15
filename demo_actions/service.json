@@ -10,7 +10,7 @@
     "serviceSpecCharacteristic": [
     {
         "name": "Actual characteristic",
-        "description": "Pretty description",
+        "description": "Pretty description frfr",
         "valueType": "integer",
         "configurable": true,
         "minCardinality": 1,
