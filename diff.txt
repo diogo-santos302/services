@@ -1,5 +1,0 @@
-demo_actions/logo.svg
-demo_actions/nf/demo_actions/cloud_init/cloud-config.txt
-demo_actions/nf/demo_actions/demo_actions_vnfd.yaml
-demo_actions/ns/demo_actions/demo_actions_nsd.yaml
-demo_actions/service.json
