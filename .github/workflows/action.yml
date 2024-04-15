@@ -37,8 +37,8 @@ jobs:
       - name: Get diff
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt
+          cat changed_files.txt
 
       - name: Execute script
         run: |
-          cat changed_files.txt
           python3 /home/runner/onboard.py changed_files.txt
