@@ -41,4 +41,4 @@ jobs:
       - name: Execute script
         run: |
           cat changed_files.txt
-          python3 onboard.py changed_files.txt
+          python3 /home/runner/onboard.py changed_files.txt
