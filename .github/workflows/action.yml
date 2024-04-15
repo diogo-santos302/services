@@ -36,4 +36,15 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Get diff
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt
+
+      - name: Compress service
+        run: |
+          tar -czvf changed_files.tar.gz -T changed_files.txt
+          echo "Archive created with changed files"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: changed-files
+          path: changed_files.tar.gz
