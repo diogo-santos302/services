@@ -19,6 +19,8 @@ def main():
             # if service in items:
             #     continue
             new_services.add(service)
+    if len(new_services) == 0:
+        print("No new service detected")
     for new_service in new_services:
         service_tar = new_service + ".tar.gz"
         with tarfile.open(service_tar, "w:gz") as tar:
