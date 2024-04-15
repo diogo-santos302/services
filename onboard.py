@@ -3,11 +3,7 @@ import requests
 import sys
 import tarfile
 
-from dotenv import find_dotenv, load_dotenv
-
 def main():
-    if ENV_FILE := find_dotenv():
-        load_dotenv(ENV_FILE)
     changed_files_path = sys.argv[1]
     new_services = _get_new_services_from_diff(changed_files_path)
     if len(new_services) == 0:
