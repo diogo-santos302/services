@@ -1,0 +1,28 @@
+{
+    "name": "Demo actions",
+    "description": "A random description",
+    "version": "0.1.0",
+    "attachment": [],
+    "validFor": {
+        "startDate": "03/04/2024 15:20",
+        "endDate": "03/04/2044 15:20"
+    },
+    "serviceSpecCharacteristic": [
+    {
+        "name": "Yo yo yo",
+        "description": "Pretty description",
+        "valueType": "integer",
+        "configurable": true,
+        "minCardinality": 1,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "integer",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 15
+            }
+        ]
+    }]
+}
