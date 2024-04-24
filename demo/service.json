@@ -1,12 +1,7 @@
 {
-    "name": "Demo service",
+    "name": "Demo Service",
     "description": "A Janus WebRTC server with a proxy with periodic generation of new certificates and a sidecar for log collection and anonymization.",
     "version": "0.1.0",
-    "attachment": [],
-    "validFor": {
-        "startDate": "03/04/2024 15:20",
-        "endDate": "03/04/2044 15:20"
-    },
     "serviceSpecCharacteristic": [
     {
         "name": "Certificate generation interval",
