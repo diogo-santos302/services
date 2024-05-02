@@ -1,17 +1,17 @@
 nsd:
   nsd:
-  - id: demo_broker_ns
-    name: demo_broker_ns
+  - id: demo_broker_ns_mutation
+    name: demo_broker_ns_mutation
     designer: RIGOUROUS
     description: EMQX broker with a Logstash sidecar for log collection and anonymization
     version: '1.0'
     vnfd-id:
-    - demo_broker_knf
+    - demo_broker_knf_mutation
     df:
     - id: default-df
       vnf-profile:
       - id: "1"
-        vnfd-id: demo_broker_knf
+        vnfd-id: demo_broker_knf_mutation
         virtual-link-connectivity:
         - virtual-link-profile-id: mgmtnet
           constituent-cpd-id:
