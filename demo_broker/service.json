@@ -16,7 +16,7 @@
                 "valueType": "boolean",
                 "unitOfMeasure": "N/A",
                 "isDefault": true,
-                "value": true
+                "value": "true"
             }
         ]
     },

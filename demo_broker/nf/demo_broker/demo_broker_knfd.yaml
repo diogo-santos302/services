@@ -5,7 +5,7 @@ vnfd:
   ext-cpd:
   - id: mgmt-ext
     k8s-cluster-net: mgmtnet
-  id: demo_broker_knf_mutation
+  id: demo_broker_knf_mutate
   k8s-cluster:
     nets:
     - id: mgmtnet
@@ -13,6 +13,6 @@ vnfd:
   - name: demo_broker
     helm-chart: demo-broker
   mgmt-cp: mgmt-ext
-  product-name: demo_broker_knf_mutation
+  product-name: demo_broker_knf_mutate
   provider: RIGOUROUS
   version: 1.0
