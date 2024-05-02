@@ -5,9 +5,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.broker.port.value }}
-      targetPort: {{ .Values.broker.port.value }}
+    - port: {{ .Values.mutation.port }}
+      targetPort: 1883
       protocol: TCP
-      name: {{ .Values.broker.port.name }}
+      name: {{ .Values.broker.name }}
   selector:
     rigourous.service: {{ .Values.broker.name }}

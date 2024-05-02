@@ -41,8 +41,8 @@ spec:
           - name: EMQX_LOG__CONSOLE__ENABLE
             value: "true"
           ports:
-            - name: {{ .Values.broker.port.name }}
-              containerPort: {{ .Values.broker.port.value }}
+            - name: {{ .Values.broker.name }}
+              containerPort: 1883
               protocol: TCP
             - name: dashboard
               containerPort: {{ .Values.service.port }}

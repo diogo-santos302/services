@@ -19,5 +19,22 @@
                 "value": true
             }
         ]
+    },
+    {
+        "name": "Mutation::Port",
+        "description": "The port used by the broker (can be mutated)",
+        "valueType": "integer",
+        "configurable": true,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "integer",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": 1883
+            }
+        ]
     }]
 }
