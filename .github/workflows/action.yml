@@ -14,14 +14,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Save current commit hash
-        id: save_commit_hash
-        run: echo "::set-output name=COMMIT_HASH::$(git rev-parse HEAD)"
           
       - name: Get diff
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt
+      
+      - name: List changed files
+        run: |
+          cat changed_files.txt
 
       - name: Execute script
         run: |
@@ -38,5 +38,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Rolling back to previous commit"
-          git reset --hard ${{ steps.save_commit_hash.outputs.COMMIT_HASH }}
+          git reset --hard ${{ github.event.before }}
           git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
