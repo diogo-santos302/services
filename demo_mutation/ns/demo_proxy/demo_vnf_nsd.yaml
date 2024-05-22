@@ -1,0 +1,25 @@
+nsd:
+  nsd:
+  - id: demo_vnf_ns_mutation
+    name: demo_vnf_ns_mutation
+    designer: RIGOUROUS
+    description: NGINX proxy with periodic generation of new certificates
+    version: '1.0'
+    vnfd-id:
+    - demo_vnf_mutation
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: "1"
+        vnfd-id: demo_vnf_mutation
+        virtual-link-connectivity:
+        - virtual-link-profile-id: mgmtnet
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: vnf-cp0-ext
+    virtual-link-desc:
+    - id: mgmtnet
+      mgmt-network: true
+    # sapd:
+    # - id: nsd_cp0
+    #   virtual-link-desc: demo_ns_vld0

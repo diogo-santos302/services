@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-pipeline
+data:
+  logstash.conf: |
+    {{- include "demo.logstashConf" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-conf
+data:
+  logstash.yml: |
+    {{- include "demo.logstashYml" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: janus-conf
+data:
+  janus.jcfg: |
+    {{- include "demo.janusJcfg" . | nindent 4 }}

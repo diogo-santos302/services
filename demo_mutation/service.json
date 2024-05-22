@@ -1,0 +1,109 @@
+{
+    "name": "Demo Service",
+    "description": "A Janus WebRTC server with a proxy with periodic generation of new certificates and a sidecar for log collection and anonymization.",
+    "version": "0.1.0",
+    "serviceSpecCharacteristic": [
+    {
+        "name": "Certificate generation interval",
+        "description": "The rate at which the certificates are generated and NGINX reloaded.",
+        "valueType": "integer",
+        "configurable": true,
+        "minCardinality": 1,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "integer",
+                "unitOfMeasure": "min",
+                "isDefault": true,
+                "value": 15
+            }
+        ]
+    },
+    {
+        "name": "SSL protocols",
+        "description": "The SSL protocols used by the NGINX server.",
+        "valueType": "array",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "text",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1"
+            },
+            {
+                "valueType": "text",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.1"
+            },
+            {
+                "valueType": "text",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.2"
+            },
+            {
+                "valueType": "text",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "TLSv1.3"
+            }
+        ]
+    },
+    {
+        "name": "SSL ciphers",
+        "description": "The SSL ciphers used by the NGINX server.",
+        "valueType": "text",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "text",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "HIGH:!aNULL:!MD5"
+            }
+        ]
+    },
+    {
+        "name": "NGINX port",
+        "description": "The port used by the NGINX server.",
+        "valueType": "integer",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "integer",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": 443
+            }
+        ]
+    },
+    {
+        "name": "Virtual machine image",
+        "description": "The image used by the VNF running the NGINX server.",
+        "valueType": "text",
+        "configurable": false,
+        "minCardinality": 0,
+        "maxCardinality": 1,
+        "extensible": false,
+        "serviceSpecCharacteristicValue": [
+            {
+                "valueType": "text",
+                "unitOfMeasure": "N/A",
+                "isDefault": true,
+                "value": "rigourous-ubuntu"
+            }
+        ]
+    }]
+}
