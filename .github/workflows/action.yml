@@ -41,15 +41,21 @@ jobs:
       - name: Get diff
         run: |
           git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt
-          cat changed_files.txt
 
       - name: Execute script
         run: |
           python3 onboard.py changed_files.txt
 
+          - name: Set up Git config
+          run: |
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        
       - name: Rollback changes on failure
         if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Rolling back to previous commit"
           git reset --hard ${{ steps.save_commit_hash.outputs.COMMIT_HASH }}
-          git push --force
+          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
