@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: janus-conf
+data:
+  janus.jcfg: |
+    {{- include "demo.janusJcfg" . | nindent 4 }}

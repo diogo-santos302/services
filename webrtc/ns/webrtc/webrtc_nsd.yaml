@@ -1,0 +1,22 @@
+nsd:
+  nsd:
+  - id: webrtc_ns
+    name: webrtc_ns
+    designer: RIGOUROUS
+    description: Janus WebRTC server
+    version: '1.0'
+    vnfd-id:
+    - webrtc_knf
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: "1"
+        vnfd-id: webrtc_knf
+        virtual-link-connectivity:
+        - virtual-link-profile-id: mgmtnet
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: mgmt-ext
+    virtual-link-desc:
+    - id: mgmtnet
+      mgmt-network: true

@@ -1,0 +1,18 @@
+vnfd:
+  description: Janus WebRTC server
+  df:
+  - id: default-df
+  ext-cpd:
+  - id: mgmt-ext
+    k8s-cluster-net: mgmtnet
+  id: webrtc_knf
+  k8s-cluster:
+    nets:
+    - id: mgmtnet
+  kdu:
+  - name: demo
+    helm-chart: demo
+  mgmt-cp: mgmt-ext
+  product-name: webrtc_knf
+  provider: RIGOUROUS
+  version: 1.0
