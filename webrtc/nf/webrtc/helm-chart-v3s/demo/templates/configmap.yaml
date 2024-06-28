@@ -5,3 +5,11 @@ metadata:
 data:
   janus.jcfg: |
     {{- include "demo.janusJcfg" . | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: janus-settings
+data:
+  settings.js: |
+    {{- include "demo.janusSettings" . | nindent 4 }}

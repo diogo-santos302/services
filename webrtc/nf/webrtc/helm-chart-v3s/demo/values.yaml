@@ -10,7 +10,7 @@ replicaCount: 1
 webrtc:
   name: webrtc
   repository: diogosantosua/webrtc
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   http: 8081
   ws: 8188
   logFile: /var/log/janus/janus.log
@@ -38,7 +38,7 @@ podSecurityContext: {}
 
 service:
   type: NodePort
-  port: 8088
+  port: 8081
 
 ingress:
   enabled: false
@@ -73,11 +73,17 @@ webrtcVolumes:
 - name: janus-conf-volume
   configMap: 
     name: janus-conf
+# - name: janus-settings-volume
+#   configMap: 
+#     name: janus-settings
 
 webrtcVolumeMounts:
 - name: janus-conf-volume
   mountPath: /usr/local/etc/janus/janus.jcfg
   subPath: janus.jcfg
+# - name: janus-settings-volume
+#   mountPath: /usr/share/nginx/html/settings.js
+#   subPath: settings.js
 
 sharedVolumes:
 - name: janus-logs-volume
