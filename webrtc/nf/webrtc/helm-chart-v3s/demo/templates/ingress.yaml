@@ -41,7 +41,7 @@ spec:
               service:
                 name: {{ $.Values.webrtc.name }}
                 port:
-                  number: {{ $.Values.mutation.port }}
+                  number: {{ $.Values.webrtc.http }}
               {{- else }}
               serviceName: {{ $.demo.fullname }}
               servicePort: {{ $svcPort }}

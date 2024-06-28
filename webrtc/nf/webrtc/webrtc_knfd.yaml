@@ -5,7 +5,7 @@ vnfd:
   ext-cpd:
   - id: mgmt-ext
     k8s-cluster-net: mgmtnet
-  id: webrtc_knf
+  id: webrtc_v1_knf
   k8s-cluster:
     nets:
     - id: mgmtnet
@@ -13,6 +13,6 @@ vnfd:
   - name: demo
     helm-chart: demo
   mgmt-cp: mgmt-ext
-  product-name: webrtc_knf
+  product-name: webrtc_v1_knf
   provider: RIGOUROUS
   version: 1.0

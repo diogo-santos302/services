@@ -5,9 +5,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.mutation.port }}
-      targetPort: {{ .Values.webrtc.port.value }}
+    - port: {{ .Values.webrtc.http }}
+      targetPort: {{ .Values.webrtc.http }}
       protocol: TCP
-      name: {{ .Values.webrtc.port.name }}
+      name: http
+    - port: {{ .Values.webrtc.ws }}
+      targetPort: {{ .Values.webrtc.ws }}
+      protocol: TCP
+      name: ws
   selector:
     rigourous.service: {{ .Values.webrtc.name }}

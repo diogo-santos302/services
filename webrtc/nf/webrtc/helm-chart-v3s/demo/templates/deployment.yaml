@@ -28,8 +28,10 @@ spec:
           image: "{{ .Values.webrtc.repository }}"
           imagePullPolicy: {{ .Values.webrtc.pullPolicy }}
           ports:
-            - name: {{ .Values.webrtc.port.name }}
-              containerPort: {{ .Values.webrtc.port.value }}
+            - name: http
+              containerPort: {{ .Values.webrtc.http }}
+            - name: ws
+              containerPort: {{ .Values.webrtc.ws }}
           volumeMounts:
           {{- with .Values.webrtcVolumeMounts }}
             {{- toYaml . | nindent 12 }}

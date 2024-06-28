@@ -3,17 +3,16 @@
 # Declare variables to be passed into your templates.
 
 mutation:
-  port: 8188
+  port: 8081
 
 replicaCount: 1
 
 webrtc:
   name: webrtc
-  repository: canyan/janus-gateway
+  repository: diogosantosua/webrtc
   pullPolicy: IfNotPresent
-  port:
-    name: webrtcport
-    value: 8188
+  http: 8081
+  ws: 8188
   logFile: /var/log/janus/janus.log
 
 imagePullSecrets: []
@@ -38,11 +37,11 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 service:
-  type: ClusterIP
-  port: 8188
+  type: NodePort
+  port: 8088
 
 ingress:
-  enabled: true
+  enabled: false
   className: "traefik"
   hosts:
     - host: example.local
