@@ -37,14 +37,16 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+          - name: http
+            containerPort: {{ .Values.service.http }}
+            protocol: TCP
+          - name: https
+            containerPort: {{ .Values.service.https }}
+            protocol: TCP
           command:
           - "/bin/sh"
           - "-c"
-          # - "tail -f /dev/null"
-          - "pip install cryptography && python /app/main.py && crontab /etc/cron.d/cronjob && cron && exec nginx -g 'daemon off;'"
+          - "pip install cryptography && python /app/main.py && echo '{{ include "nginx_proxy.cronjob" . }}' >> /etc/crontab && cron && exec nginx -g 'daemon off;'"
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

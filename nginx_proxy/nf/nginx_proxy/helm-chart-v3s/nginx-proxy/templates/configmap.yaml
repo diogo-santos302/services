@@ -13,11 +13,3 @@ metadata:
 data:
   nginx.conf: |
     {{- tpl (.Files.Get "files/nginx.conf") . | nindent 4 }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cronjob
-data:
-  cronjob: |
-    {{- tpl (.Files.Get "files/cronjob") . | nindent 4 }}

@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-interval: 1
+interval: 2
 backend_url: http://localhost
 
 replicaCount: 1
@@ -43,8 +43,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort
+  http: 80
+  https: 443
 
 ingress:
   enabled: false
@@ -92,9 +93,6 @@ autoscaling:
 
 # Additional volumes on the output Deployment definition.
 volumes:
-- name: cronjob-volume
-  configMap:
-    name: cronjob
 - name: main-volume
   configMap:
     name: main
@@ -104,9 +102,6 @@ volumes:
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts: 
-- name: cronjob-volume
-  mountPath: /etc/cron.d/cronjob
-  subPath: cronjob
 - name: main-volume
   mountPath: /app
 - name: nginx-conf-volume

@@ -7,9 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.service.http }}
       targetPort: http
       protocol: TCP
       name: http
+    - port: {{ .Values.service.https }}
+      targetPort: https
+      protocol: TCP
+      name: https
   selector:
     {{- include "nginx_proxy.selectorLabels" . | nindent 4 }}

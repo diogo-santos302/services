@@ -10,5 +10,6 @@ RUN mkdir -p /etc/nginx/ssl
 # RUN pip install -r requirements.txt
 
 EXPOSE 80
+EXPOSE 443
 
 CMD ["sh", "-c", "service cron start && nginx -g 'daemon off;'"]
