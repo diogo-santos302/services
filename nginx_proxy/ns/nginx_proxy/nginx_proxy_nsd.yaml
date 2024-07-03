@@ -1,0 +1,25 @@
+nsd:
+  nsd:
+  - id: nginx_proxy_ns
+    name: nginx_proxy_ns
+    designer: RIGOUROUS
+    description: NGINX proxy with periodic generation of new certificates
+    version: '1.0'
+    vnfd-id:
+    - nginx_proxy_vnf
+    df:
+    - id: default-df
+      vnf-profile:
+      - id: "1"
+        vnfd-id: nginx_proxy_vnf
+        virtual-link-connectivity:
+        - virtual-link-profile-id: mgmtnet
+          constituent-cpd-id:
+          - constituent-base-element-id: "1"
+            constituent-cpd-id: vnf-cp0-ext
+    virtual-link-desc:
+    - id: mgmtnet
+      mgmt-network: true
+    # sapd:
+    # - id: nsd_cp0
+    #   virtual-link-desc: demo_ns_vld0

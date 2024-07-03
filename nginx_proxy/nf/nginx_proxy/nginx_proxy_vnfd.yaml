@@ -1,0 +1,18 @@
+vnfd:
+  description: NGINX proxy with periodic generation of new certificates
+  df:
+  - id: default-df
+  ext-cpd:
+  - id: mgmt-ext
+    k8s-cluster-net: mgmtnet
+  id: nginx_proxy_vnf
+  k8s-cluster:
+    nets:
+    - id: mgmtnet
+  kdu:
+  - name: demo
+    helm-chart: demo
+  mgmt-cp: mgmt-ext
+  product-name: nginx_proxy_vnf
+  provider: RIGOUROUS
+  version: 1.0
