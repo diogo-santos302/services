@@ -10,3 +10,9 @@ run:
 
 push: 
 	docker push diogosantosua/python-nginx-cron:latest 
+
+install:
+	helm install --generate-name ../nf/nginx_proxy/helm-chart-v3s/nginx-proxy
+
+uninstallall:
+	helm uninstall $(shell helm list -q)

@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 interval: 2
-backend_url: http://localhost
+backend_url: http://webrtc:8081
 
 replicaCount: 1
 
