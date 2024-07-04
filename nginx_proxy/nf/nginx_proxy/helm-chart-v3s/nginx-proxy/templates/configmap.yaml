@@ -9,7 +9,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-conf
+  name: update-nginx-conf
 data:
-  nginx.conf: |
-    {{- tpl (.Files.Get "files/nginx.conf") . | nindent 4 }}
+  update-nginx-conf.sh: |
+    {{- tpl (.Files.Get "files/update-nginx-conf.sh") . | nindent 4 }}

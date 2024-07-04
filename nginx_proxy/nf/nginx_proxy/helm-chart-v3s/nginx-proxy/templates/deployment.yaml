@@ -43,10 +43,13 @@ spec:
           - name: https
             containerPort: {{ .Values.service.https }}
             protocol: TCP
-          command:
-          - "/bin/sh"
-          - "-c"
-          - "pip install cryptography && python /app/main.py && echo '{{ include "nginx_proxy.cronjob" . }}' >> /etc/crontab && cron && exec nginx -g 'daemon off;'"
+          command: ["/bin/sh", "-c"]
+          args:
+          - "pip install cryptography && python /app/main.py && \
+             echo '{{ include "nginx_proxy.cronjob" . }}' >> /etc/crontab && \
+             cp /mnt/shared/nginx.conf /etc/nginx/nginx.conf && \
+             cron && \
+             exec nginx -g 'daemon off;'"
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
@@ -57,8 +60,26 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.volumes }}
+      initContainers:
+      - name: nginx-conf-nodeport
+        image: bitnami/kubectl:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - "cp /scripts/update-nginx-conf.sh /tmp/update-nginx-conf.sh && \
+          chmod +x /tmp/update-nginx-conf.sh && \
+          /tmp/update-nginx-conf.sh"
+        volumeMounts:
+        {{- with .Values.volumeMounts }}
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.initVolumeMounts }}
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
       volumes:
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.initVolumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}

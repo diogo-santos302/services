@@ -96,17 +96,24 @@ volumes:
 - name: main-volume
   configMap:
     name: main
-- name: nginx-conf-volume
+- name: shared-volume
+  emptyDir: {}
+
+initVolumes:
+- name: update-nginx-volume
   configMap:
-    name: nginx-conf
+    name: update-nginx-conf
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts: 
 - name: main-volume
   mountPath: /app
-- name: nginx-conf-volume
-  mountPath: /etc/nginx/nginx.conf
-  subPath: nginx.conf
+- name: shared-volume
+  mountPath: /mnt/shared
+
+initVolumeMounts:
+- name: update-nginx-volume
+  mountPath: /scripts
 
 nodeSelector: {}
 

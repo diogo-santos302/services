@@ -1,3 +1,7 @@
+#!/bin/sh
+NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "nginx_proxy.fullname" . }})
+
+cat > /mnt/shared/nginx.conf << EOF 
 worker_processes 1;
 
 events { 
@@ -8,7 +12,7 @@ http {
     server {
         listen 80;
         server_name _;
-        return 301 https://$host$request_uri:$NODE_PORT;
+        return 301 https://\$host:${NODE_PORT}\$request_uri;
     }
 
     server {
@@ -22,10 +26,11 @@ http {
 
         location / {
             proxy_pass {{ $.Values.backend_url }};
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
         }
     }
 }
+EOF
