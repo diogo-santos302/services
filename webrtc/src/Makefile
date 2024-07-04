@@ -1,4 +1,4 @@
-.PHONY: build run stopall push install uninstallall
+.PHONY: build run stopall push install uninstall
 
 all: build push run
 
@@ -17,5 +17,5 @@ push:
 install:
 	helm install --generate-name ../nf/webrtc/helm-chart-v3s/demo
 
-uninstallall:
-	helm uninstall $(shell helm list -q)
+uninstall:
+	helm uninstall $(shell helm list -q | grep demo-)

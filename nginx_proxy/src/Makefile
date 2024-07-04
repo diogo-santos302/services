@@ -1,4 +1,4 @@
-.PHONY: all build run push
+.PHONY: all build run push install uninstall
 
 all: build run
 
@@ -14,5 +14,5 @@ push:
 install:
 	helm install --generate-name ../nf/nginx_proxy/helm-chart-v3s/nginx-proxy
 
-uninstallall:
-	helm uninstall $(shell helm list -q)
+uninstall:
+	helm uninstall $(shell helm list -q | grep nginx-proxy-)
