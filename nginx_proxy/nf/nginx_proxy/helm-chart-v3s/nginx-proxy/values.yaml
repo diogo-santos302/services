@@ -5,6 +5,8 @@
 interval: 2
 backend_url: http://webrtc:8081
 
+namespace: default
+
 replicaCount: 1
 
 image:

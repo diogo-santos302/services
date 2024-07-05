@@ -1,5 +1,5 @@
 #!/bin/sh
-NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "nginx_proxy.fullname" . }})
+NODE_PORT=$(kubectl get --namespace {{ .Values.namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "nginx_proxy.fullname" . }})
 
 cat > /mnt/shared/nginx.conf << EOF 
 worker_processes 1;

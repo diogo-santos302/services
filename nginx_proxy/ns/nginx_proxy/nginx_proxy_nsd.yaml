@@ -16,7 +16,7 @@ nsd:
         - virtual-link-profile-id: mgmtnet
           constituent-cpd-id:
           - constituent-base-element-id: "1"
-            constituent-cpd-id: vnf-cp0-ext
+            constituent-cpd-id: mgmt-ext
     virtual-link-desc:
     - id: mgmtnet
       mgmt-network: true

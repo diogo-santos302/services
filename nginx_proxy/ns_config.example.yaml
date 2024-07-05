@@ -1,0 +1,6 @@
+additionalParamsForVnf:
+- member-vnf-index: "1"
+  additionalParamsForKdu:
+  - kdu_name: nginx-proxy
+    additionalParams:
+      backend_url: http://10.255.31.249:30913/

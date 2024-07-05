@@ -10,8 +10,8 @@ vnfd:
     nets:
     - id: mgmtnet
   kdu:
-  - name: demo
-    helm-chart: demo
+  - name: nginx-proxy
+    helm-chart: nginx-proxy
   mgmt-cp: mgmt-ext
   product-name: nginx_proxy_vnf
   provider: RIGOUROUS
